@@ -1,0 +1,67 @@
+<div class="container">
+  <header>
+    <h1>{{ title }}</h1>
+    <button class="secondary" (click)="load()" [disabled]="loading">Recarregar</button>
+  </header>
+
+  <section *ngIf="error" class="alert error">{{ error }}</section>
+  <section *ngIf="success" class="alert success">{{ success }}</section>
+
+  <section class="card">
+    <h2>Benefícios</h2>
+    <p *ngIf="loading">Carregando...</p>
+    <table class="table" *ngIf="!loading && beneficios?.length">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Descrição</th>
+        <th>Valor</th>
+        <th>Ativo</th>
+        <th>Ações</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let b of beneficios">
+        <td>{{ b.id }}</td>
+        <td>{{ b.nome }}</td>
+        <td>{{ b.descricao }}</td>
+        <td>R$ {{ b.valor | number: '1.2-2' }}</td>
+        <td>{{ b.ativo ? 'Sim' : 'Não' }}</td>
+        <td>
+          <button class="secondary" (click)="remover(b.id)">Excluir</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <p *ngIf="!loading && !beneficios?.length"><small class="muted">Nenhum benefício cadastrado.</small></p>
+  </section>
+
+  <section class="card">
+    <h2>Novo Benefício</h2>
+    <form (ngSubmit)="criar()" #f="ngForm">
+      <div class="row">
+        <input name="nome" [(ngModel)]="novo.nome" placeholder="Nome" required>
+        <input name="descricao" [(ngModel)]="novo.descricao" placeholder="Descrição">
+        <input type="number" step="0.01" name="valor" [(ngModel)]="novo.valor" placeholder="Valor" required>
+        <label><input type="checkbox" name="ativo" [(ngModel)]="novo.ativo"> Ativo</label>
+      </div>
+      <div style="margin-top:.5rem">
+        <button type="submit">Criar</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2>Transferência</h2>
+    <div class="row">
+      <input type="number" name="fromId" [(ngModel)]="transferencia.fromId" placeholder="ID Origem">
+      <input type="number" name="toId" [(ngModel)]="transferencia.toId" placeholder="ID Destino">
+      <input type="number" step="0.01" name="amount" [(ngModel)]="transferencia.amount" placeholder="Valor">
+    </div>
+    <div style="margin-top:.5rem">
+      <button (click)="transferir()">Transferir</button>
+    </div>
+    <p><small class="muted">Dica: use os IDs listados acima.</small></p>
+  </section>
+</div>
